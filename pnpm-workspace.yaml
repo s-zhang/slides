@@ -1,0 +1,7 @@
+packages:
+  - 'decks/*'
+  - 'packages/*'
+
+# playwright-chromium (for `slidev export`) needs its postinstall to fetch the browser
+allowBuilds:
+  playwright-chromium: true

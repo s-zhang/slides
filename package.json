@@ -1,0 +1,10 @@
+{
+  "name": "slidev-workspace",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm -C decks/demo dev",
+    "build": "node scripts/build-all.mjs",
+    "new": "node scripts/new-deck.mjs"
+  }
+}
