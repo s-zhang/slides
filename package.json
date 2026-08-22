@@ -6,5 +6,6 @@
     "dev": "pnpm -C decks/demo dev",
     "build": "node scripts/build-all.mjs",
     "new": "node scripts/new-deck.mjs"
-  }
+  },
+  "packageManager": "pnpm@11.9.0"
 }
