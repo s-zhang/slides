@@ -1,5 +1,5 @@
 ---
-theme: seriph
+theme: default
 title: Evals Markets + Cyber Red Teaming
 info: |
   GovAI Final Presentation, Summer 2026 — Pingshan Zhang.
@@ -44,6 +44,8 @@ layout: section
 # Part 1 · Evals
 
 A market for external frontier-AI evaluations
+
+<SectionTracker :active="1" class="mt-8" />
 
 ---
 
@@ -106,6 +108,8 @@ layout: section
 # Part 2 · Cyber
 
 Reckonings from OpenAI × Hugging Face:<br>red teaming as the future cyber eval & defense
+
+<SectionTracker :active="2" class="mt-8" />
 
 ---
 layout: statement
@@ -225,30 +229,43 @@ layout: section
 
 # Part 3 · Next Steps
 
+<SectionTracker :active="3" class="mt-8" />
+
 ---
 
 # Next Steps
 
-<div class="grid grid-cols-2 gap-8 mt-6 text-xl">
+<div class="grid grid-cols-2 gap-10 items-center mt-2">
+
+<div v-click class="text-center">
+  <img src="/mentor-project.png" class="rounded-lg h-72 mx-auto shadow-lg" alt="Project Training-Custody — Amir Sarid + Pingshan Zhang" />
+</div>
 
 <div v-click>
 
-### Location
+### Where & when
 - **Seattle** — Sept to Nov
 - **SF** — Oct
 - **Singapore** — TBD
 
+### Hosts &amp; programs
+
+<div class="flex flex-wrap items-center gap-4 mt-3">
+  <img src="/sash.png" class="h-10 rounded" alt="Singapore AI Safety Hub (SASH)" />
+  <img src="/heron.png" class="h-10 rounded" alt="Heron" />
+  <img src="/singapore-fellowship.png" class="h-14 rounded" alt="The Singapore AI Safety Fellowship" />
 </div>
 
-<div v-click>
-
-### Support
-- **Mentor**
-- **Research Manager**
-
 </div>
 
 </div>
+
+<!--
+Project: Training-Custody, mentored by Amir Sarid (AI Safety Researcher, ex-Microsoft).
+Hosts/programs: SASH = Singapore AI Safety Hub, Heron, and the Singapore AI Safety Fellowship.
+Locations across the fall: Seattle (Sept–Nov), SF (Oct), Singapore (TBD).
+-->
+
 
 ---
 layout: center
