@@ -661,13 +661,9 @@ layout: default
 
 <div class="grid grid-cols-5 gap-6 mt-2">
 
-<div class="col-span-3">
-<img src="/gpt-red-robustness.png" class="rounded" />
-</div>
-
 <div class="col-span-2 flex flex-col justify-center text-sm">
 
-<div v-click class="border-l-4 border-teal-500 pl-4 mb-4">
+<div class="border-l-4 border-teal-500 pl-4 mb-4">
 
 ### GPT-Red
 
@@ -675,7 +671,7 @@ OpenAI trained a model that is very good at prompt injection, then used it to at
 
 </div>
 
-<div v-click class="border-l-4 border-orange-500 pl-4">
+<div v-click="2" class="border-l-4 border-orange-500 pl-4">
 
 Four releases, Feb to Jun 2026. Prompt injection success rate roughly <strong>6.9% to 3.8%</strong>.
 
@@ -687,16 +683,23 @@ Better. Not solved. And note the axes are cropped.
 
 </div>
 
+<div v-click="1" class="col-span-3 flex items-center">
+<img src="/gpt-red-robustness.png" class="rounded" />
+</div>
+
 </div>
 
 <!--
-The honest reading of this chart matters more than the headline.
+Say what GPT-Red is before showing the evidence, so the chart answers a question
+the room is already holding.
+
+[click] The chart. The honest reading of it matters more than the headline.
 
 What it shows: two series over four GPT-5.x releases between 5 February and
 25 June 2026. Prompt injection success rate falls from about 6.9% to about 3.8%.
 Instruction hierarchy violations fall from about 0.29% to about 0.05%.
 
-Three caveats to say out loud:
+[click] Three caveats to say out loud:
 
 1. Both axes are cropped, which the chart itself admits in the axis labels. The
    visual slope is steeper than the underlying change. This is OpenAI's own
