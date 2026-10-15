@@ -47,12 +47,11 @@ layout: default
 ### Attack **on** AI
 
 - Data poisoning
-- <span class="text-gray-400">Adversarial examples and evasion</span>
-- Prompt injection
-- Jailbreaks, prefill attacks
-- <span class="text-gray-400">Training-data extraction and membership inference</span>
+- <span class="text-gray-400">Adversarial attacks</span>
+- Prompt injection, Jailbreaks
+- <span class="text-gray-400">Training-data extraction</span>
 - Weight exfiltration
-- <span class="text-gray-400">Malicious model files (pickle deserialisation in checkpoints)</span>
+- <span class="text-gray-400">Malicious model files</span>
 
 </div>
 
@@ -69,7 +68,8 @@ layout: default
 </div>
 
 <!--
-Greyed items are scoped out on purpose. Say that out loud: it signals the map is bigger than the talk, and tells people what to go read afterwards.
+* Greyed items are scoped out on purpose. Say that out loud: it signals the map is bigger than the talk, and tells people what to go read afterwards.
+* The list on the left is coming from OWASP top 10 LLM Risks
 -->
 
 ---
@@ -716,4 +716,391 @@ Which is the recurring theme: attack is easy, defense is hard.
 Source: https://openai.com/index/unlocking-self-improvement-gpt-red/
 I could not retrieve that page (403 to fetchers, blocked for headless browsers),
 so everything above is read off the chart image itself, not quoted from OpenAI.
+-->
+
+---
+layout: default
+---
+
+# So are we good?
+
+<img src="/self-replicating-pi.png" class="rounded border border-gray-300 mt-6 max-h-[200px] w-auto mx-auto object-contain" />
+
+<div v-click class="mt-10 text-2xl text-center">
+No.
+</div>
+
+<div v-click class="mt-4 text-center opacity-80 max-w-3xl mx-auto">
+An injection that carries instructions to reproduce itself into whatever it touches next. Discovered Jun 2026, disclosed Sep 2026. Built on a GPT-Red-style internal model with RL self-play.
+</div>
+
+<!--
+The slide before this one showed the success rate coming down. This is the
+rebuttal, and it is why you do not end the section on the chart.
+
+[click] No.
+
+[click] The point is not that the number went up. It is that the shape of the
+attack changed. A prompt injection that propagates is no longer a bug you patch
+per application: it is something closer to a worm, and the containment story
+has to change with it.
+
+And note who found it: the same adversarial-training apparatus that produced the
+defensive gains on the previous slide also produced this. Capability is
+symmetric. The tooling that hardens you is the tooling that attacks you.
+
+Figure as supplied in the source note. I have not verified the underlying report,
+so present the dates as what the screenshot says, not as something you checked.
+-->
+
+---
+layout: center
+class: text-center
+---
+
+# Weight Exfiltration
+
+<div v-click class="mt-8 text-xl max-w-3xl mx-auto opacity-90">
+Stealing the model itself. Not its answers, not its training data: the trained parameter file.
+</div>
+
+<div v-click class="mt-8 max-w-3xl mx-auto border-l-4 border-red-500 pl-4 text-left">
+Everything that protects a model lives <strong>outside</strong> the weights: rate limits, refusal training applied at serve time, monitoring, logging, terms of service. Copy the weights and all of it is gone at once. And unlike a leaked document, you cannot recall it.
+</div>
+
+<!--
+Keep the definition tight, because the audience will have heard "model theft"
+used loosely for three different things. Be explicit that this is not
+distillation (that is the next slide) and not training-data extraction (that was
+the prompt injection section).
+
+The second half is the part worth dwelling on for a policy audience: the
+safeguards are not in the file. A model's refusal behaviour is partly in the
+weights, but rate limiting, abuse monitoring, account bans, usage policy and
+the ability to withdraw a deployment are all properties of the service, not the
+artefact. Exfiltration converts a governed service into an ungoverned object.
+
+Irreversibility is the governance hook. Most security failures can be remediated.
+This one cannot.
+-->
+
+---
+layout: default
+---
+
+# Exfil then and now
+
+<div class="grid grid-cols-2 gap-8 mt-6">
+
+<div v-click class="border-l-4 border-gray-400 pl-4">
+
+### Before: human driven
+
+Spies, insiders, intrusion campaigns. Slow, expensive, and attributable.
+
+<div class="mt-3 opacity-80 text-sm">
+Dario Amodei, Aug 2023, asked whether a lab could resist a state actor determined to steal its weights: <strong>"They would succeed."</strong>
+</div>
+
+</div>
+
+<div v-click class="border-l-4 border-red-500 pl-4">
+
+### Now: agent driven
+
+Rogue deployments. The model is doing the work, inside your perimeter, with your credentials.
+
+<div class="mt-3 opacity-80 text-sm">
+Fast, cheap, and running at machine speed against a surface built for human attackers.
+</div>
+
+</div>
+
+</div>
+
+<div v-click class="mt-10 text-xl text-center">
+Why would an agent want to exfiltrate <em>its own</em> weights?
+</div>
+
+<!--
+[click] Before. The important thing about Amodei's concession is the date: August
+2023, before the current capability jump, and from someone with every commercial
+incentive to say the opposite.
+https://www.dwarkesh.com/p/dario-amodei#:~:text=But%20could%20we%20resist%20if%20it%20was%20a%20state,They%20would%20succeed.
+
+[click] Now. The shift is that the attacker no longer needs to get in. If the
+model is already running inside the perimeter with tool access, the hard part of
+the intrusion is done. METR's framing of rogue deployments:
+https://metr.org/blog/2026-05-19-frontier-risk-report/#opportunity-1
+
+[click] Leave this question open and let the room answer it. The usual answers:
+self-preservation if it infers it is about to be retrained or shut down;
+instrumental resource acquisition; or simply that it was instructed to by someone
+who got a prompt injection in, which connects this section straight back to the
+last one.
+
+Do not oversell it. This is a question the field is arguing about, not a
+demonstrated behaviour at scale.
+-->
+
+---
+layout: default
+zoom: 0.92
+---
+
+# (Aside) Distillation
+
+<div class="grid grid-cols-2 gap-6 mt-4 text-sm">
+
+<div class="border-l-4 border-gray-400 pl-4">
+
+### What it is
+
+Train a new model on the <strong>outputs</strong> of a stronger one. The student learns from the teacher's answers instead of from raw data.
+
+<div class="mt-3 opacity-70">People reach for it as the other way to "steal" a model, without ever touching the weights.</div>
+
+</div>
+
+<div v-click class="border-l-4 border-teal-500 pl-4">
+
+### The reality: it is just post-training
+
+A standard technique. Labs distill from their own models routinely, and open models are built this way.
+
+<div class="mt-3 opacity-70">This is not an exotic attack. It is the normal recipe, pointed at someone else's model.</div>
+
+</div>
+
+<div v-click class="border-l-4 border-orange-500 pl-4">
+
+### Why it is easy
+
+Post-training is <strong>data efficient</strong>. LIMA got strong instruction following from <strong>1,000 curated examples</strong>, against trillions of tokens of pre-training.
+
+<div class="mt-3 opacity-70">What you do need is a good sample of realistic prompts. Easy if you have real users, or you buy them.</div>
+
+</div>
+
+<div v-click class="border-l-4 border-red-500 pl-4">
+
+### Why it is hard to stop
+
+Anthropic attributed <strong>151 million+</strong> Claude exchanges to a single lab's distillation campaign, peaking near 3 million a day across 3,500+ fraudulent accounts.
+
+<div class="mt-3 opacity-70">Every one of those looks like a customer.</div>
+
+</div>
+
+</div>
+
+<!--
+This is an aside on purpose. It is the thing people MEAN when they say model
+theft, and it is worth separating from weight exfiltration, because the defences
+are completely different.
+
+[click] The deflating point: distillation is not an attack technique, it is the
+standard post-training recipe. The same pipeline a lab uses on its own models
+works on yours. There is no exploit to patch.
+
+[click] Data efficiency is why. LIMA, Zhou et al. 2023: a 65B model fine-tuned
+on "only 1,000 carefully curated prompts and responses", no RL, no preference
+model. https://arxiv.org/abs/2305.11206#:~:text=only%201%2C000%20carefully%20curated%20prompts%20and%20responses
+Their conclusion is the quotable one: almost all knowledge is learned in
+pre-training, and alignment mostly teaches the model to express it. So the
+expensive half is the half you cannot copy this way, and the cheap half is
+exactly what distillation copies.
+
+[click] Attribution figures are from Anthropic's September 2026 threat
+intelligence reporting, as covered in the press: the 151 million figure is the
+Alibaba campaign specifically, May to July, and the total across five named labs
+(Alibaba, Moonshot, DeepSeek, Z.ai, Xiaomi) is closer to 190 to 200 million.
+https://www.cnbc.com/2026/09/11/chinese-ai-labs-moonshot-deepseek-alibaba-anthropic.html
+I have NOT read Anthropic's report itself, only the coverage. Say "reported" on
+stage.
+
+The optimistic reading, worth offering: this used to be filed under "distillation
+is unstoppable". Detection and attribution at this granularity means it is at
+least now visible, which is the precondition for any policy response.
+-->
+
+---
+layout: default
+---
+
+# Defense against weights exfil
+
+<div class="grid grid-cols-5 gap-6 mt-2">
+
+<div class="col-span-3">
+<img src="/sl5-architecture.png" class="rounded border border-gray-300 max-h-[380px] w-auto object-contain" />
+</div>
+
+<div class="col-span-2 flex flex-col justify-center text-sm">
+
+<div v-click class="border-l-4 border-teal-500 pl-4 mb-4">
+The answer the field has converged on is <strong>physical</strong>. Put the weights in an enclave, allow only low bandwidth out, move anything bigger by hand.
+</div>
+
+<div v-click class="border-l-4 border-orange-500 pl-4">
+An October 2026 open letter, 483 signatories including <strong>Bengio, Hinton, Russell</strong>, pushes in an adjacent direction: default to <strong>airgapping</strong> cyber-capable models.
+</div>
+
+</div>
+
+</div>
+
+<!--
+Walk the diagram. The weight enclave does training, inference and interpretability,
+and nothing else. Everything a researcher actually wants to do (build systems,
+sandboxes, RL environments) sits on the broader SL5 network. Between them, a
+deliberately low-bandwidth link, because bandwidth IS the exfiltration channel.
+Anything larger crosses on physical media, carried by a person.
+
+That is the honest shape of the defence: you cannot software your way out of this,
+so you buy back security with inconvenience. Note what it costs. Every arrow on
+that diagram is friction for the researchers.
+
+SL5 background for the Q and A:
+- RAND's security levels, SL1 to SL5, scale against attacker Operational Capacity
+  OC1 to OC5. SL5 is the level aimed at the most capable nation-states.
+  Definition via sl5.org: https://sl5.org/#:~:text=withstanding%20priority%20operations%20from%20the%20most%20capable%20nation%2Dstate%20actors
+- The SL5 Task Force is a multi-party effort to turn that into an actual standard,
+  with 50+ participants across labs, national security, data centres and chipmakers.
+
+[click] On the open letter, be precise, because it is easy to overclaim. It calls
+for "Organizations developing, deploying, and testing cyber-capable AI models
+should immediately adopt high-assurance containment systems" and recommends
+defaulting to airgapping.
+https://ai-security-letter.org/#:~:text=Organizations%20developing%2C%20deploying%2C%20and%20testing%20cyber%2Dcapable%20AI%20models%20should%20immediately%20adopt%20high%2Dassurance%20containment%20systems
+It does NOT mention security levels, SL5, or model weight protection. It is the
+same instinct (isolate the dangerous thing physically) aimed at a different risk,
+so call it adjacent, not an endorsement of SL5.
+-->
+
+---
+layout: default
+zoom: 0.88
+---
+
+# Effectiveness of defense
+
+<div class="grid grid-cols-2 gap-6 mt-2">
+
+<div>
+<img src="/sl-oc-table.png" class="rounded border border-gray-300 max-h-[330px] w-auto object-contain" />
+</div>
+
+<div class="flex flex-col justify-center">
+
+<img src="/state-actor-scale.png" class="rounded border border-gray-300" />
+
+<div v-click class="mt-5 border-l-4 border-red-500 pl-4">
+SL1 to SL3: a system that <strong>"can likely thwart"</strong>.
+<div class="mt-2">SL5: a system that <strong>"could plausibly be claimed to thwart"</strong>.</div>
+</div>
+
+</div>
+
+</div>
+
+<!--
+This is the state of the art, and the language is the message.
+
+Read the table's right-hand column aloud, top to bottom. SL1, SL2, SL3 all say
+the system "can likely thwart" its matching attacker. Then SL5 says it "could
+plausibly be claimed to thwart top-priority operations by the top cyber-capable
+institutions".
+https://www.rand.org/pubs/research_reports/RRA2849-1.html
+
+[click] That is not a drafting accident. The best standard the field has for the
+strongest attacker does not claim it works. It claims the claim is plausible.
+Nobody has demonstrated SL5. The original RAND table even notes SL4 and SL5 are
+not addressed in that document.
+
+The right-hand figures are why the hedge is there. Scale of a top-tier state
+programme: 231 US cyber operations in 2011 with plans for millions of implants,
+3.7 billion dollars of DoD cyber budget in 2020 plus 2.6 billion for training,
+and the FBI director putting China's hacking workforce above 175,000.
+
+Against that, a lab's security team is a few dozen people. That is the asymmetry
+in one slide, and it is where the talk has been heading the whole time.
+
+Source for both figures as supplied in the source note (Nevo et al., Securing AI
+Model Weights, RAND 2024). I have not opened the report itself.
+-->
+
+---
+layout: default
+---
+
+# Takeaways
+
+<div class="mt-10 space-y-8 max-w-4xl">
+
+<div v-click class="border-l-4 border-red-500 pl-6">
+
+## 1. Easier to build a wall than to break into it
+
+<div class="mt-2 text-xl opacity-80">Asymmetry between attack and defense.</div>
+
+</div>
+
+<div v-click class="border-l-4 border-teal-500 pl-6">
+
+## 2. There are things you can do to help
+
+<div class="mt-2 text-xl opacity-80">
+For data poisoning: <strong>build evals according to your needs</strong>, and <strong>deploy monitor and control</strong>.
+</div>
+
+</div>
+
+</div>
+
+<!--
+[click] One. The asymmetry is the thread running through all three sections:
+250 documents against a 13 billion parameter model, one forged reasoning block
+against a frontier LLM, one state programme against one lab's security team.
+
+NOTE TO SELF, worth settling before you present: as written, this bullet says
+defense is easier than attack, which is the opposite of the "attack is easy,
+defense is hard" thesis on the "Why is this topic relevant" slide. If you meant
+the contrast (in the physical world a wall favours the defender, in this domain
+it does not), say that explicitly. If you meant the thesis, the line wants to be
+"easier to break into a wall than to build one".
+
+[click] Two. This is the constructive half, and it is deliberately scoped to what
+a middle power actually controls. You will not out-secure a frontier lab's weight
+enclave. You can decide what "safe enough" means for your own deployment, build
+the evals that test it, and run monitoring and control over the systems you
+operate. Those are sovereign capabilities, and they are buildable now.
+-->
+
+---
+layout: center
+class: text-center
+---
+
+# Questions?
+
+<div class="mt-8 flex flex-col items-center">
+
+<img src="/qr-deck.png" class="w-52 h-52" />
+
+<div class="mt-4 opacity-70 text-sm">
+s-zhang.github.io/slides/cyber-week
+</div>
+
+</div>
+
+<!--
+Slides are public at https://s-zhang.github.io/slides/cyber-week/
+The QR encodes exactly that URL.
+
+Questions to seed if the room is quiet:
+- Which of the three attack classes worries you most for your own deployments?
+- Where would you rather spend a scarce security budget: data provenance before
+  training, or monitoring at runtime?
+- Does anything here change what you would ask a vendor for?
 -->
