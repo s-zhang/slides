@@ -615,11 +615,11 @@ layout: default
 
 <div class="grid grid-cols-2 gap-6 mt-4 text-sm">
 
-<div class="border-l-4 border-orange-500 pl-3">
+<div v-click class="border-l-4 border-orange-500 pl-3">
 We wanted the model to learn the <strong>tags</strong>. It learned the <strong>style</strong>.
 </div>
 
-<div class="border-l-4 border-red-500 pl-3">
+<div v-click class="border-l-4 border-red-500 pl-3">
 No clear boundary between high trust and low trust, between data and code.
 </div>
 
@@ -638,9 +638,12 @@ token looks like the model's internal reasoning to the model itself. Text the
 attacker typed in the user turn scores just as high as the model's real
 chain of thought. The model cannot tell them apart, because it never learned to.
 
-That is the whole theory. Training taught the model what reasoning LOOKS like,
-not where the tag boundary IS. Style is learnable from data; provenance is not,
-because provenance is not in the text.
+[click] That is the whole theory. Training taught the model what reasoning
+LOOKS like, not where the tag boundary IS.
+
+[click] And so there is no boundary to enforce. Style is learnable from data;
+provenance is not, because provenance is not in the text. Land this one and move
+on, it sets up the SQL comparison.
 
 Sources are in the note's scratchpad:
 https://www.lesswrong.com/posts/d8xDGzCEYE639qqEv/a-mechanistic-explanation-of-prompt-injection-and-why-you
