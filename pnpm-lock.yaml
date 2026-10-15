@@ -8,6 +8,24 @@ importers:
 
   .: {}
 
+  decks/cyber-week:
+    dependencies:
+      '@iconify-json/mdi':
+        specifier: ^1.2.3
+        version: 1.2.3
+      '@slidev/cli':
+        specifier: ^52.19.1
+        version: 52.19.1(@nuxt/kit@3.21.11)(@oxc-project/types@0.146.0)(@types/markdown-it@14.2.0)(@types/node@22.20.1)(@vitejs/devtools-kit@0.4.12(@modelcontextprotocol/server@2.0.0)(cac@7.0.0)(srvx@0.12.7)(vite@8.2.2(@types/node@22.20.1)(jiti@2.7.0)(yaml@2.9.0)))(@vue/compiler-sfc@3.5.41)(cac@7.0.0)(hono@4.13.3)(lightningcss@1.33.0)(markdown-it@14.3.0)(oxc-parser@0.131.0)(postcss@8.5.26)(rolldown@1.2.5)(srvx@0.12.7)
+      '@slidev/theme-default':
+        specifier: latest
+        version: 0.25.0
+      '@slidev/theme-seriph':
+        specifier: latest
+        version: 0.25.0
+      vue:
+        specifier: ^3.5.33
+        version: 3.5.41(typescript@6.0.3)
+
   decks/demo:
     dependencies:
       '@slidev/cli':
@@ -250,6 +268,9 @@ packages:
 
   '@iconify-json/carbon@1.2.25':
     resolution: {integrity: sha512-7GLgXnmi47Skh8DcPPiP8U3vgm3rOVziEe+flCdG/kwiVaeb649U3Eqt/ej4f3NvlZK8BrOxpR3xQlWFLZYblQ==}
+
+  '@iconify-json/mdi@1.2.3':
+    resolution: {integrity: sha512-O3cLwbDOK7NNDf2ihaQOH5F9JglnulNDFV7WprU2dSoZu3h3cWH//h74uQAB87brHmvFVxIOkuBX2sZSzYhScg==}
 
   '@iconify-json/ph@1.2.2':
     resolution: {integrity: sha512-PgkEZNtqa8hBGjHXQa4pMwZa93hmfu8FUSjs/nv4oUU6yLsgv+gh9nu28Kqi8Fz9CCVu4hj1MZs9/60J57IzFw==}
@@ -3226,6 +3247,10 @@ snapshots:
       hono: 4.13.3
 
   '@iconify-json/carbon@1.2.25':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/mdi@1.2.3':
     dependencies:
       '@iconify/types': 2.0.0
 

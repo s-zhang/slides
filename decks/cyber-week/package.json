@@ -1,0 +1,17 @@
+{
+  "name": "@decks/cyber-week",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@slidev/cli": "^52.19.1",
+    "@slidev/theme-default": "latest",
+    "@slidev/theme-seriph": "latest",
+    "vue": "^3.5.33",
+    "@iconify-json/mdi": "^1.2.3"
+  },
+  "scripts": {
+    "dev": "slidev --open",
+    "build": "slidev build",
+    "export": "slidev export"
+  }
+}
