@@ -1,0 +1,14 @@
+[Unit]
+Description=Mirror Obsidian vault slide sources into slidev decks
+After=obsidian-sync.service
+
+[Service]
+Type=simple
+ExecStart=/home/dev/slidev-workspace/scripts/vault-sync.py \
+  "/home/dev/Obsidian/Notes/Cyber week talk (slides).md" \
+  /home/dev/slidev-workspace/decks/cyber-week/slides.md
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=default.target

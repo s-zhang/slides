@@ -1,14 +1,27 @@
 ---
-theme: default
-title: Attacks on AI
+theme: seriph
+title: Attacks on AI by AI
 info: |
-  Cyber Week talk. Part 1: attacks on AI, focused on data poisoning.
+  Cyber Week talk. Attacks on AI, focused on data poisoning.
   Source note: Talk with Cyber week.
 transition: slide-left
 mdc: true
-fonts:
-  sans: Inter
-  serif: 'Roboto Slab'
+layout: center
+class: text-center
+---
+
+# Attacks on AI by AI
+
+<div class="text-xl opacity-70 mt-4">Cyber Week</div>
+
+<div class="pt-10 opacity-60">Pingshan Zhang</div>
+
+<!--
+Title slide. Two halves to the talk, and the title carries both: attacks aimed
+AT models, and attacks carried out BY them.
+-->
+
+---
 layout: image
 image: /about-me.png
 backgroundSize: contain
