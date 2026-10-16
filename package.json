@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "pnpm -C decks/demo dev",
     "build": "node scripts/build-all.mjs",
-    "new": "node scripts/new-deck.mjs"
+    "new": "node scripts/new-deck.mjs",
+    "lint": "node scripts/slide-lint.mjs"
   },
   "packageManager": "pnpm@11.9.0"
 }
